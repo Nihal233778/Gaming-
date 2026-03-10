@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUGU· Game</title>
+    <title>AdSwipe Arena · Telegram Game</title>
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -146,6 +146,32 @@
             margin-top: 8px;
             border: 1px solid #e2e8f0;
         }
+        /* New game button */
+        .new-game-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            transition: background 0.2s, transform 0.1s;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .new-game-btn:hover {
+            background: #2563eb;
+        }
+        .new-game-btn:active {
+            transform: scale(0.97);
+        }
         .footer-note {
             font-size: 0.8rem;
             color: #94a3b8;
@@ -155,8 +181,9 @@
 </head>
 <body>
     <div class="game-card">
-        <h1>Adsonar Review</h1>
-        <div class="subhead">⚡ tap • rate • win</div>
+        <!-- New title (replaced "Adsonar Review") -->
+        <h1>AdSwipe Arena</h1>
+        <div class="subhead">⚡ tap • rate • dominate</div>
 
         <div class="score-board">
             <div class="score-label">SCORE</div>
@@ -178,6 +205,10 @@
 
         <!-- Instant feedback area -->
         <div id="feedbackMessage" class="feedback">👆 vote now</div>
+
+        <!-- ✨ NEW BUTTON: New Game (resets score) -->
+        <button class="new-game-btn" id="newGameBtn">↻ New Game</button>
+
         <div class="footer-note">— game category —</div>
     </div>
 
@@ -187,8 +218,8 @@
             const tg = window.Telegram?.WebApp;
             if (tg) {
                 tg.expand();               // expand to full height
-                tg.enableClosingConfirmation(); // optional: ask before closing
-                // You can also set the main button if you want (optional)
+                tg.enableClosingConfirmation(); // optional
+                // (Optional main button – you can enable it if you want)
                 // tg.MainButton.setText('Submit Score');
                 // tg.MainButton.show();
             }
@@ -213,6 +244,7 @@
             const feedbackDiv = document.getElementById('feedbackMessage');
             const likeBtn = document.getElementById('likeBtn');
             const dislikeBtn = document.getElementById('dislikeBtn');
+            const newGameBtn = document.getElementById('newGameBtn');
 
             // Helper: pick random ad
             function getRandomAd() {
@@ -236,16 +268,29 @@
                 scoreSpan.innerText = score;
             }
 
+            // Reset game (new game button)
+            function resetGame() {
+                score = 0;
+                updateScore();
+                loadNewAd();
+                feedbackDiv.innerText = '🔄 game restarted!';
+                feedbackDiv.style.color = '#1e3c72';
+                feedbackDiv.style.background = '#e0f2fe';
+                // after a moment, revert to neutral
+                setTimeout(() => {
+                    if (feedbackDiv.innerText === '🔄 game restarted!') {
+                        feedbackDiv.innerText = '👆 vote now';
+                        feedbackDiv.style.color = '#334155';
+                        feedbackDiv.style.background = '#f8fafc';
+                    }
+                }, 1200);
+            }
+
             // Show feedback message (colored)
             function showFeedback(message, isCorrect) {
                 feedbackDiv.innerText = message;
                 feedbackDiv.style.background = isCorrect ? '#d1fae5' : '#fee2e2';
                 feedbackDiv.style.color = isCorrect ? '#065f46' : '#991b1b';
-                // Optionally send data to Telegram if needed
-                if (tg) {
-                    // Example: you could send the score increment event
-                    // tg.sendData(JSON.stringify({ event: 'vote', correct: isCorrect, score: score }));
-                }
             }
 
             // Handle a vote (user's choice: true = liked, false = disliked)
@@ -271,6 +316,7 @@
             // Event listeners
             likeBtn.addEventListener('click', () => handleVote(true));
             dislikeBtn.addEventListener('click', () => handleVote(false));
+            newGameBtn.addEventListener('click', resetGame);
 
             // Initialize first ad
             loadNewAd();
@@ -288,6 +334,7 @@
             // For better mobile experience, prevent double-tap zoom on buttons
             likeBtn.addEventListener('touchstart', (e) => e.preventDefault());
             dislikeBtn.addEventListener('touchstart', (e) => e.preventDefault());
+            newGameBtn.addEventListener('touchstart', (e) => e.preventDefault());
         })();
     </script>
 </body>
