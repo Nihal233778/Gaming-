@@ -146,8 +146,15 @@
             margin-top: 8px;
             border: 1px solid #e2e8f0;
         }
-        /* New game button */
-        .new-game-btn {
+        /* Button row for New Game & Submit */
+        .bottom-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .secondary-btn {
             background: #3b82f6;
             color: white;
             border: none;
@@ -155,22 +162,26 @@
             padding: 12px 24px;
             font-size: 1.2rem;
             font-weight: 600;
-            margin-top: 20px;
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
             transition: background 0.2s, transform 0.1s;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            flex: 0 1 auto;
         }
-        .new-game-btn:hover {
+        .secondary-btn:hover {
             background: #2563eb;
         }
-        .new-game-btn:active {
+        .secondary-btn:active {
             transform: scale(0.97);
+        }
+        .submit-btn {
+            background: #8b5cf6;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+        }
+        .submit-btn:hover {
+            background: #7c3aed;
         }
         .footer-note {
             font-size: 0.8rem;
@@ -181,7 +192,6 @@
 </head>
 <body>
     <div class="game-card">
-        <!-- New title (replaced "Adsonar Review") -->
         <h1>AdSwipe Arena</h1>
         <div class="subhead">⚡ tap • rate • dominate</div>
 
@@ -206,8 +216,11 @@
         <!-- Instant feedback area -->
         <div id="feedbackMessage" class="feedback">👆 vote now</div>
 
-        <!-- ✨ NEW BUTTON: New Game (resets score) -->
-        <button class="new-game-btn" id="newGameBtn">↻ New Game</button>
+        <!-- TWO CLICKABLE BOTTOM BUTTONS: New Game and Submit Score -->
+        <div class="bottom-buttons">
+            <button class="secondary-btn" id="newGameBtn">↻ New Game</button>
+            <button class="secondary-btn submit-btn" id="submitScoreBtn">🏆 Submit Score</button>
+        </div>
 
         <div class="footer-note">— game category —</div>
     </div>
@@ -219,9 +232,6 @@
             if (tg) {
                 tg.expand();               // expand to full height
                 tg.enableClosingConfirmation(); // optional
-                // (Optional main button – you can enable it if you want)
-                // tg.MainButton.setText('Submit Score');
-                // tg.MainButton.show();
             }
 
             // --- Game data (simulated ads) ---
@@ -245,6 +255,7 @@
             const likeBtn = document.getElementById('likeBtn');
             const dislikeBtn = document.getElementById('dislikeBtn');
             const newGameBtn = document.getElementById('newGameBtn');
+            const submitBtn = document.getElementById('submitScoreBtn');
 
             // Helper: pick random ad
             function getRandomAd() {
@@ -276,7 +287,6 @@
                 feedbackDiv.innerText = '🔄 game restarted!';
                 feedbackDiv.style.color = '#1e3c72';
                 feedbackDiv.style.background = '#e0f2fe';
-                // after a moment, revert to neutral
                 setTimeout(() => {
                     if (feedbackDiv.innerText === '🔄 game restarted!') {
                         feedbackDiv.innerText = '👆 vote now';
@@ -313,29 +323,34 @@
                 }, 600);
             }
 
+            // Submit score to Telegram bot
+            function submitScore() {
+                if (tg) {
+                    // Send the current score as a JSON string
+                    tg.sendData(JSON.stringify({ score: score }));
+                    // Optionally close the app
+                    tg.close();
+                } else {
+                    alert('Score: ' + score + ' (Telegram integration not available)');
+                }
+            }
+
             // Event listeners
             likeBtn.addEventListener('click', () => handleVote(true));
             dislikeBtn.addEventListener('click', () => handleVote(false));
             newGameBtn.addEventListener('click', resetGame);
+            submitBtn.addEventListener('click', submitScore);
 
             // Initialize first ad
             loadNewAd();
             updateScore();
 
-            // Optional: handle main button click if you enabled it
-            if (tg) {
-                tg.onEvent('mainButtonClicked', function() {
-                    // Send final score back to bot (if you want)
-                    tg.sendData(JSON.stringify({ score: score }));
-                    tg.close();
-                });
-            }
-
-            // For better mobile experience, prevent double-tap zoom on buttons
-            likeBtn.addEventListener('touchstart', (e) => e.preventDefault());
-            dislikeBtn.addEventListener('touchstart', (e) => e.preventDefault());
-            newGameBtn.addEventListener('touchstart', (e) => e.preventDefault());
+            // Prevent double-tap zoom on buttons (better mobile)
+            [likeBtn, dislikeBtn, newGameBtn, submitBtn].forEach(btn => {
+                btn.addEventListener('touchstart', (e) => e.preventDefault());
+            });
         })();
     </script>
 </body>
-</html>
+</html>    
+                   
