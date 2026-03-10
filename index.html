@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -146,7 +146,6 @@
             margin-top: 8px;
             border: 1px solid #e2e8f0;
         }
-        /* Button row for New Game & Submit */
         .bottom-buttons {
             display: flex;
             gap: 12px;
@@ -188,6 +187,20 @@
             color: #94a3b8;
             margin-top: 24px;
         }
+        /* Simple debug output (hidden by default) */
+        #debugConsole {
+            background: #1e1e2f;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: left;
+            padding: 8px;
+            border-radius: 8px;
+            max-height: 100px;
+            overflow: auto;
+            margin-top: 16px;
+            display: none; /* Hide by default; set to block if needed */
+        }
     </style>
 </head>
 <body>
@@ -216,25 +229,49 @@
         <!-- Instant feedback area -->
         <div id="feedbackMessage" class="feedback">👆 vote now</div>
 
-        <!-- TWO CLICKABLE BOTTOM BUTTONS: New Game and Submit Score -->
+        <!-- TWO CLICKABLE BOTTOM BUTTONS -->
         <div class="bottom-buttons">
             <button class="secondary-btn" id="newGameBtn">↻ New Game</button>
             <button class="secondary-btn submit-btn" id="submitScoreBtn">🏆 Submit Score</button>
         </div>
+
+        <!-- Hidden debug console (uncomment style display:block to see logs) -->
+        <div id="debugConsole"></div>
 
         <div class="footer-note">— game category —</div>
     </div>
 
     <script>
         (function() {
+            "use strict";
+
+            // Simple debug logger (writes to console and to hidden div if present)
+            function debugLog(...args) {
+                console.log(...args);
+                const debugDiv = document.getElementById('debugConsole');
+                if (debugDiv) {
+                    const msg = args.map(arg => 
+                        typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                    ).join(' ');
+                    debugDiv.innerHTML += '[LOG] ' + msg + '<br>';
+                    // Auto-scroll to bottom
+                    debugDiv.scrollTop = debugDiv.scrollHeight;
+                }
+            }
+
+            debugLog('Script started');
+
             // --- Telegram WebApp init ---
             const tg = window.Telegram?.WebApp;
             if (tg) {
-                tg.expand();               // expand to full height
-                tg.enableClosingConfirmation(); // optional
+                tg.expand();
+                tg.enableClosingConfirmation();
+                debugLog('Telegram WebApp initialized');
+            } else {
+                debugLog('Telegram WebApp not available (running outside Telegram)');
             }
 
-            // --- Game data (simulated ads) ---
+            // --- Game data ---
             const ads = [
                 { image: 'https://placehold.co/400x200/22c55e/white?text=Ergonomic+Chair', headline: 'Ergonomic Chair', description: 'Back pain? Never again! 40% off today.', good: true },
                 { image: 'https://placehold.co/400x200/eab308/black?text=Burger+King', headline: 'Whopper Deal', description: 'Buy 1 Get 1 Free – limited time.', good: false },
@@ -257,6 +294,24 @@
             const newGameBtn = document.getElementById('newGameBtn');
             const submitBtn = document.getElementById('submitScoreBtn');
 
+            // Verify all elements exist
+            debugLog('DOM elements:', {
+                scoreSpan: !!scoreSpan,
+                adImage: !!adImage,
+                adHeadline: !!adHeadline,
+                adDescription: !!adDescription,
+                feedbackDiv: !!feedbackDiv,
+                likeBtn: !!likeBtn,
+                dislikeBtn: !!dislikeBtn,
+                newGameBtn: !!newGameBtn,
+                submitBtn: !!submitBtn
+            });
+
+            if (!likeBtn || !dislikeBtn || !newGameBtn || !submitBtn) {
+                debugLog('ERROR: One or more buttons missing!');
+                return;
+            }
+
             // Helper: pick random ad
             function getRandomAd() {
                 return ads[Math.floor(Math.random() * ads.length)];
@@ -268,19 +323,21 @@
                 adImage.src = currentAd.image;
                 adHeadline.innerText = currentAd.headline;
                 adDescription.innerText = currentAd.description;
-                // Reset feedback to neutral
                 feedbackDiv.innerText = '👆 new ad – vote!';
                 feedbackDiv.style.color = '#334155';
                 feedbackDiv.style.background = '#f8fafc';
+                debugLog('New ad loaded:', currentAd.headline);
             }
 
             // Update score display
             function updateScore() {
                 scoreSpan.innerText = score;
+                debugLog('Score updated:', score);
             }
 
-            // Reset game (new game button)
+            // Reset game
             function resetGame() {
+                debugLog('Reset game clicked');
                 score = 0;
                 updateScore();
                 loadNewAd();
@@ -296,16 +353,22 @@
                 }, 1200);
             }
 
-            // Show feedback message (colored)
+            // Show feedback message
             function showFeedback(message, isCorrect) {
                 feedbackDiv.innerText = message;
                 feedbackDiv.style.background = isCorrect ? '#d1fae5' : '#fee2e2';
                 feedbackDiv.style.color = isCorrect ? '#065f46' : '#991b1b';
+                debugLog('Feedback:', message, 'Correct:', isCorrect);
             }
 
-            // Handle a vote (user's choice: true = liked, false = disliked)
+            // Handle vote
             function handleVote(userLiked) {
-                if (!currentAd) return;
+                debugLog('Vote registered:', userLiked ? 'Like' : 'Dislike');
+                if (!currentAd) {
+                    debugLog('No current ad, loading new one');
+                    loadNewAd();
+                    return;
+                }
 
                 const isCorrect = (userLiked === currentAd.good);
                 if (isCorrect) {
@@ -317,40 +380,61 @@
 
                 updateScore();
 
-                // After short delay, load next ad
                 setTimeout(() => {
                     loadNewAd();
                 }, 600);
             }
 
-            // Submit score to Telegram bot
+            // Submit score to Telegram
             function submitScore() {
+                debugLog('Submit score clicked, score:', score);
                 if (tg) {
-                    // Send the current score as a JSON string
-                    tg.sendData(JSON.stringify({ score: score }));
-                    // Optionally close the app
+                    const data = JSON.stringify({ score: score });
+                    tg.sendData(data);
+                    debugLog('Sent data to Telegram:', data);
                     tg.close();
                 } else {
-                    alert('Score: ' + score + ' (Telegram integration not available)');
+                    alert('Score: ' + score + ' (Telegram not available)');
                 }
             }
 
-            // Event listeners
-            likeBtn.addEventListener('click', () => handleVote(true));
-            dislikeBtn.addEventListener('click', () => handleVote(false));
-            newGameBtn.addEventListener('click', resetGame);
-            submitBtn.addEventListener('click', submitScore);
+            // Attach event listeners with explicit checks
+            likeBtn.addEventListener('click', function(e) {
+                debugLog('Like button clicked');
+                handleVote(true);
+            });
 
-            // Initialize first ad
+            dislikeBtn.addEventListener('click', function(e) {
+                debugLog('Dislike button clicked');
+                handleVote(false);
+            });
+
+            newGameBtn.addEventListener('click', function(e) {
+                debugLog('New Game button clicked');
+                resetGame();
+            });
+
+            submitBtn.addEventListener('click', function(e) {
+                debugLog('Submit button clicked');
+                submitScore();
+            });
+
+            // Also attach touch events for mobile (prevent default to avoid zoom)
+            [likeBtn, dislikeBtn, newGameBtn, submitBtn].forEach(btn => {
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                }, { passive: false });
+            });
+
+            // Initialize
             loadNewAd();
             updateScore();
+            debugLog('Initialization complete');
 
-            // Prevent double-tap zoom on buttons (better mobile)
-            [likeBtn, dislikeBtn, newGameBtn, submitBtn].forEach(btn => {
-                btn.addEventListener('touchstart', (e) => e.preventDefault());
-            });
+            // If you want to see debug console, uncomment next line:
+            // document.getElementById('debugConsole').style.display = 'block';
         })();
     </script>
 </body>
-</html>    
-                   
+</html>     
+                
