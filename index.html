@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>ADSBitv-ex Demo | Rewarded Ads Integration - Fixed</title>
+  <title>ADSBitv-ex | Corrected Integration</title>
   <style>
     * {
       margin: 0;
@@ -27,7 +27,7 @@
       background: rgba(255,255,255,0.92);
       backdrop-filter: blur(2px);
       border-radius: 2.5rem;
-      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25);
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.5);
     }
@@ -41,7 +41,6 @@
     .hero h1 {
       font-size: 2rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
       background: linear-gradient(135deg, #FFFFFF, #C0E0FF, #FFE5A3);
       -webkit-background-clip: text;
       background-clip: text;
@@ -58,7 +57,6 @@
       color: #FFE5A3;
       margin-left: 1rem;
       display: inline-block;
-      vertical-align: middle;
     }
 
     .hero p {
@@ -68,13 +66,12 @@
     }
 
     .content {
-      padding: 2rem 2rem 2rem 2rem;
+      padding: 2rem;
     }
 
     .integration-card {
       background: #ffffff;
       border-radius: 1.5rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
       border: 1px solid #e9edf2;
       margin-bottom: 2rem;
       overflow: hidden;
@@ -84,21 +81,9 @@
       background: #f8fafd;
       padding: 0.9rem 1.5rem;
       border-bottom: 1px solid #eef2f8;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.85rem;
+      font-family: monospace;
       font-weight: 600;
       color: #1e293b;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .code-header span {
-      background: #e2e8f0;
-      padding: 0.2rem 0.5rem;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      color: #0f172a;
     }
 
     pre {
@@ -107,10 +92,8 @@
       padding: 1.2rem 1.5rem;
       margin: 0;
       overflow-x: auto;
-      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-family: monospace;
       font-size: 0.85rem;
-      line-height: 1.5;
-      border-radius: 0;
     }
 
     .reward-panel {
@@ -118,8 +101,6 @@
       border-radius: 1.5rem;
       border: 1px solid #eef2f8;
       padding: 1.5rem;
-      margin-top: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
 
     .reward-header {
@@ -144,12 +125,8 @@
       background: #fef9e3;
       padding: 0.4rem 1rem;
       border-radius: 100px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
       font-weight: 600;
       color: #b45309;
-      border: 1px solid #ffedd5;
     }
 
     .reward-balance {
@@ -161,7 +138,6 @@
       display: inline-block;
       padding: 0.2rem 1.2rem;
       border-radius: 48px;
-      letter-spacing: 1px;
     }
 
     .btn-ad {
@@ -176,26 +152,17 @@
       align-items: center;
       gap: 10px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: 0.2s;
       box-shadow: 0 8px 18px rgba(245, 158, 11, 0.25);
-      font-family: inherit;
     }
 
     .btn-ad:hover:not(:disabled) {
       transform: scale(1.02);
-      background: linear-gradient(105deg, #fcd34d, #fbbf24);
-      box-shadow: 0 12px 22px rgba(245, 158, 11, 0.35);
-    }
-
-    .btn-ad:active {
-      transform: scale(0.98);
     }
 
     .btn-ad:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      transform: none;
-      filter: grayscale(0.05);
     }
 
     .status-area {
@@ -203,28 +170,17 @@
       background: #f1f5f9;
       border-radius: 1rem;
       padding: 0.8rem 1rem;
-      font-size: 0.85rem;
       font-family: monospace;
-      color: #1e293b;
+      font-size: 0.85rem;
       border-left: 4px solid #f59e0b;
       max-height: 200px;
       overflow-y: auto;
     }
 
     .log-entry {
-      word-break: break-word;
       margin-bottom: 0.3rem;
       padding: 0.2rem 0;
       border-bottom: 1px solid #e2e8f0;
-    }
-
-    .footer-note {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: #5b6e8c;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 1.5rem;
     }
 
     .warning-box {
@@ -236,422 +192,222 @@
       font-size: 0.8rem;
     }
 
-    button .emoji {
-      font-size: 1.2rem;
-    }
-
-    @media (max-width: 550px) {
-      body {
-        padding: 1rem;
-      }
-      .content {
-        padding: 1.2rem;
-      }
-      .hero h1 {
-        font-size: 1.5rem;
-      }
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #5b6e8c;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.5rem;
     }
   </style>
-  
-  <!-- ============================================= -->
-  <!-- STEP 1: Add the Ad Script (with App ID)      -->
-  <!-- App ID: 3196b91c0b69                          -->
-  <!-- ============================================= -->
-  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appId=3196b91c0b69" id="adsbitv-external-script"></script>
-  
-  <!-- Fallback: If the SDK doesn't load, we'll create a mock for testing -->
+
+  <!-- ===================================================== -->
+  <!-- STEP 1: Correct ad script with lowercase 'appid'     -->
+  <!-- App ID: 3196b91c0b69 (active campaign)               -->
+  <!-- ===================================================== -->
+  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69" id="adsbitv-script"></script>
+
+  <!-- Fallback: ensures demo works even if real SDK fails -->
   <script>
-    // This fallback ensures the demo works even if the actual SDK endpoint is unavailable
-    // It maintains the exact same API contract: window.showadsbitv(ex) returns a Promise
-    
-    let sdkLoadAttempts = 0;
-    const maxWaitTime = 5000; // 5 seconds max wait
-    
-    function checkAndSetupFallback() {
-      if (typeof window.showadsbitv !== 'undefined') {
-        console.log("✅ ADSBitv SDK loaded successfully from remote endpoint!");
+    let sdkCheckCount = 0;
+    function checkAndFallback() {
+      if (typeof window.showadsbitvex !== 'undefined') {
+        console.log("✅ Real ADSBitv SDK loaded.");
         return true;
       }
-      
-      sdkLoadAttempts++;
-      if (sdkLoadAttempts > 10) {
-        console.warn("⚠️ Remote SDK not loaded after multiple attempts. Using fallback mock implementation for demo purposes.");
-        
-        // Create the exact same API as documented
-        // This matches the integration pattern: window.showadsbitv(ex) returns Promise
-        window.showadsbitv = function(ex) {
-          console.log("[Mock] showadsbitv called with:", ex);
-          
+      if (sdkCheckCount++ > 10) {
+        console.warn("⚠️ Real SDK not loaded, using mock fallback.");
+        window.showadsbitvex = function() {
+          console.log("[Mock] showadsbitvex called");
           return new Promise((resolve, reject) => {
-            // Simulate ad loading delay
-            const timeout = setTimeout(() => {
-              // Simulate successful ad watch 90% of the time for testing
-              const shouldSucceed = Math.random() > 0.1;
-              
-              if (shouldSucceed) {
-                resolve({ success: true, message: "Ad watched successfully" });
+            setTimeout(() => {
+              if (Math.random() > 0.1) {
+                resolve({ success: true });
               } else {
-                reject(new Error("User skipped the ad or ad failed to load"));
+                reject(new Error("Ad unavailable (mock simulation)"));
               }
             }, 1500);
-            
-            // Store timeout to show loading state
-            window._currentAdTimeout = timeout;
           });
         };
-        
-        // Also define window.ex if needed
-        if (typeof window.ex === 'undefined') {
-          window.ex = { adContext: true, appId: "3196b91c0b69" };
-        }
-        
         return true;
       }
-      
       return false;
     }
-    
-    // Check periodically for SDK
-    let checkInterval = setInterval(() => {
-      if (checkAndSetupFallback()) {
-        clearInterval(checkInterval);
-      }
-    }, 500);
-    
-    // Also check after page load
-    window.addEventListener('load', function() {
-      setTimeout(() => {
-        checkAndSetupFallback();
-      }, 1000);
-    });
+    setInterval(() => checkAndFallback(), 500);
+    window.addEventListener('load', () => setTimeout(checkAndFallback, 1000));
   </script>
 </head>
 <body>
-
 <div class="demo-container">
   <div class="hero">
     <div>
-      <h1>ADSBitv-ex <span class="badge">Rewarded Ads SDK</span></h1>
-      <p>Monetization & engagement · seamless reward integration | <strong style="color:#FFE5A3;">App ID: 3196b91c0b69</strong></p>
+      <h1>ADSBitv-ex <span class="badge">Corrected Integration</span></h1>
+      <p>App ID: <strong style="color:#FFE5A3;">3196b91c0b69</strong> · Campaign Active</p>
     </div>
   </div>
 
   <div class="content">
-    <!-- Integration documentation recap card (visual) -->
     <div class="integration-card">
-      <div class="code-header">
-        📘 Quick Start Guide · <span>Step 1 + Step 2 integrated</span>
-      </div>
-      <pre><code>&lt;script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appId=3196b91c0b69"&gt;&lt;/script&gt;
+      <div class="code-header">📘 Correct script & function</div>
+      <pre><code>&lt;script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"&gt;&lt;/script&gt;
 
 &lt;script&gt;
-window.showadsbitv(ex)
-  .then(() => { 
-    // User watched the ad – give reward here!
-    console.log("Reward earned!"); 
+window.showadsbitvex()
+  .then(() => {
+    // User watched ad → give reward
+    console.log("Reward earned!");
   })
-  .catch(e => { 
-    console.error("Ad error:", e); 
+  .catch(e => {
+    console.error("Ad error:", e);
   });
 &lt;/script&gt;</code></pre>
     </div>
 
-    <!-- Reward simulation panel (actual integration demo) -->
     <div class="reward-panel">
       <div class="reward-header">
         <h2>🎁 Rewarded Ads Demo</h2>
-        <div class="coin-stats">
-          <span>⭐</span> <span>Credits earned by watching ads</span>
-        </div>
+        <div class="coin-stats">⭐ Credits earned</div>
       </div>
-      
-      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #475569;">Your reward balance</div>
-          <div class="reward-balance" id="rewardBalanceDisplay">0</div>
-        </div>
-        <button class="btn-ad" id="showRewardedAdBtn">
-          <span class="emoji">🎬</span> Watch rewarded ad & get +50 credits
-        </button>
+      <div>
+        <div style="font-size: 0.8rem; text-transform: uppercase;">Your reward balance</div>
+        <div class="reward-balance" id="balance">0</div>
       </div>
-
-      <div class="status-area" id="adStatusMessage">
-        <div class="log-entry">⚡ Initializing ADSBitv-ex SDK with App ID: 3196b91c0b69...</div>
-        <div class="log-entry">📝 Integration pattern: window.showadsbitv(ex) → reward grant</div>
+      <button class="btn-ad" id="watchBtn">🎬 Watch rewarded ad & get +50 credits</button>
+      <div class="status-area" id="statusLog">
+        <div class="log-entry">⚡ Ready – using correct integration.</div>
       </div>
-      
-      <div class="warning-box" id="sdkStatusBox">
-        🔄 Checking SDK availability...
+      <div class="warning-box" id="sdkStatus">
+        🔄 Checking SDK...
       </div>
-      
-      <p style="font-size: 0.7rem; color: #5b6e8c; margin-top: 0.8rem;">
-        💡 <strong>Note:</strong> If the remote SDK endpoint is unavailable, a mock implementation automatically activates 
-        (following the exact same API contract). This ensures you can test the integration pattern regardless of network conditions.
+      <p style="font-size: 0.7rem; margin-top: 0.8rem;">
+        💡 Real SDK uses <code>window.showadsbitvex()</code>. If real SDK fails, mock activates automatically.
       </p>
     </div>
-
     <div class="footer-note">
-      <strong>📄 Integration with App ID: 3196b91c0b69</strong> — ADSBitv-ex rewarded ads | Built following official docs<br/>
-      Syed Abrar Jahin — jahinbang888@gmail.com
+      ADSBitv-ex integration | App ID: 3196b91c0b69 | Syed Abrar Jahin
     </div>
   </div>
 </div>
 
 <script>
-  // *************************************************************
-  // Complete integration following ADSBitv-ex documentation
-  // Step 1: Ad script loaded with appId = 3196b91c0b69
-  // Step 2: Call window.showadsbitv(ex) to show rewarded ad
-  // On success -> grant reward, on error -> handle gracefully
-  // *************************************************************
-
-  // --- UI Elements ---
-  const rewardBalanceSpan = document.getElementById('rewardBalanceDisplay');
-  const watchAdBtn = document.getElementById('showRewardedAdBtn');
-  const statusMessageDiv = document.getElementById('adStatusMessage');
-  const sdkStatusBox = document.getElementById('sdkStatusBox');
-  
-  // Reward state
-  let userRewardPoints = 0;
-  const REWARD_AMOUNT = 50;
+  // =====================================================
+  // STEP 2: Call window.showadsbitvex() and grant reward
+  // =====================================================
+  let userPoints = 0;
   let isAdLoading = false;
   let sdkReady = false;
-  
-  // Helper: update balance UI
-  function updateBalanceUI() {
-    rewardBalanceSpan.innerText = userRewardPoints;
-  }
-  
-  // Helper: display log/status
-  function setStatus(message, isError = false) {
-    const timestamp = new Date().toLocaleTimeString();
+
+  const balanceEl = document.getElementById('balance');
+  const watchBtn = document.getElementById('watchBtn');
+  const statusLog = document.getElementById('statusLog');
+  const sdkStatusBox = document.getElementById('sdkStatus');
+
+  function addLog(msg, isError = false) {
+    const time = new Date().toLocaleTimeString();
     const icon = isError ? '❌' : '✅';
-    const html = `<div class="log-entry">${icon} [${timestamp}] ${message}</div>`;
-    
-    const currentHtml = statusMessageDiv.innerHTML;
-    let newContent = html + currentHtml;
-    
-    // Limit entries
-    const lines = newContent.split('<div class="log-entry">');
-    if (lines.length > 12) {
-      const limited = lines.slice(0, 12).join('<div class="log-entry">');
-      newContent = limited;
-    }
-    statusMessageDiv.innerHTML = newContent;
-    
-    if (isError) {
-      console.error(`[ADSBitv] ${message}`);
-    } else {
-      console.log(`[ADSBitv] ${message}`);
-    }
+    const entry = `<div class="log-entry">${icon} [${time}] ${msg}</div>`;
+    statusLog.innerHTML = entry + statusLog.innerHTML;
+    if (statusLog.children.length > 12) statusLog.lastChild?.remove();
+    console.log(`[ADSBitv] ${msg}`);
   }
-  
-  // Update SDK status box
-  function updateSdkStatus(isReady, source = 'unknown') {
-    if (isReady) {
+
+  function updateBalanceUI() {
+    balanceEl.textContent = userPoints;
+  }
+
+  function setSDKReady(ready, source = '') {
+    sdkReady = ready;
+    if (ready) {
       sdkStatusBox.style.background = '#d1fae5';
       sdkStatusBox.style.borderLeftColor = '#10b981';
-      sdkStatusBox.innerHTML = `✅ SDK Ready! Using ${source} implementation. You can now watch rewarded ads.`;
-      sdkReady = true;
-      watchAdBtn.disabled = false;
+      sdkStatusBox.innerHTML = `✅ SDK Ready! (${source}) You can now watch ads.`;
+      watchBtn.disabled = false;
+      watchBtn.innerHTML = '🎬 Watch rewarded ad & get +50 credits';
     } else {
       sdkStatusBox.style.background = '#fef3c7';
       sdkStatusBox.style.borderLeftColor = '#f59e0b';
-      sdkStatusBox.innerHTML = `⏳ Loading SDK from remote endpoint... (App ID: 3196b91c0b69)<br>If unavailable, fallback will activate automatically.`;
-      watchAdBtn.disabled = true;
+      sdkStatusBox.innerHTML = '⏳ Loading SDK... if stuck, mock will activate.';
+      watchBtn.disabled = true;
+      watchBtn.innerHTML = '⏳ Waiting for SDK...';
     }
   }
-  
-  // Set button loading state
-  function setButtonLoading(loading) {
-    isAdLoading = loading;
-    if (loading) {
-      watchAdBtn.disabled = true;
-      watchAdBtn.innerHTML = '<span class="emoji">⏳</span> Loading ad... please wait';
-    } else {
-      watchAdBtn.disabled = !sdkReady;
-      if (sdkReady) {
-        watchAdBtn.innerHTML = '<span class="emoji">🎬</span> Watch rewarded ad & get +50 credits';
-      } else {
-        watchAdBtn.innerHTML = '<span class="emoji">⏳</span> Waiting for SDK...';
-      }
-    }
-  }
-  
-  // --- Core reward function - EXACT integration from docs ---
-  function triggerRewardedAd() {
-    // Check if ad is already loading
-    if (isAdLoading) {
-      setStatus("Ad request already in progress, please wait...", false);
-      return;
-    }
-    
-    // Check if SDK is ready
-    if (typeof window.showadsbitv === 'undefined') {
-      setStatus("Ad SDK not ready yet. Please wait for initialization...", true);
-      return;
-    }
-    
-    setButtonLoading(true);
-    setStatus("📺 Requesting rewarded ad via window.showadsbitv(ex)...", false);
-    
-    // ========================================================
-    // EXACT INTEGRATION AS PER DOCUMENTATION:
-    // window.showadsbitv(ex)
-    //   .then(() => { /* give reward */ })
-    //   .catch(e => { /* handle error */ })
-    // ========================================================
-    window.showadsbitv(ex)
-      .then(() => {
-        // User watched the ad – give reward here!
-        const rewardEarned = REWARD_AMOUNT;
-        userRewardPoints += rewardEarned;
-        updateBalanceUI();
-        
-        setStatus(`✨ Reward granted! +${rewardEarned} credits. Total: ${userRewardPoints} points.`, false);
-        setButtonLoading(false);
-        
-        // Visual feedback
-        rewardBalanceSpan.style.transform = "scale(1.1)";
-        setTimeout(() => { 
-          if(rewardBalanceSpan) rewardBalanceSpan.style.transform = ""; 
-        }, 200);
-      })
-      .catch((error) => {
-        // Handle ad error (user skipped, network failure, no fill, etc)
-        console.warn("Ad error:", error);
-        let errorMsg = "Ad could not be displayed or was interrupted.";
-        
-        if (error && typeof error === 'object') {
-          if (error.message) errorMsg = error.message;
-          else if (error.toString) errorMsg = error.toString();
-        } else if (typeof error === 'string') {
-          errorMsg = error;
-        }
-        
-        setStatus(`Ad error: ${errorMsg}. No reward given.`, true);
-        setButtonLoading(false);
-      });
-  }
-  
-  // Check SDK readiness and determine source
-  function checkSDKReadiness() {
-    if (typeof window.showadsbitv !== 'undefined') {
-      // Check if it's our mock or real SDK
-      const isMock = window.showadsbitv.toString().includes('mock') || 
-                     window.showadsbitv.toString().includes('fallback');
-      const source = isMock ? 'fallback mock' : 'remote ADSBitv SDK';
-      updateSdkStatus(true, source);
-      setStatus(`✅ SDK initialized successfully using ${source} implementation`, false);
-      setButtonLoading(false);
+
+  function checkRealSDK() {
+    if (typeof window.showadsbitvex === 'function') {
+      setSDKReady(true, 'real ADSBitv SDK');
+      addLog('Real SDK detected. Using window.showadsbitvex()', false);
       return true;
     }
     return false;
   }
-  
-  // Monitor SDK availability
-  let checkCount = 0;
-  const maxChecks = 20; // 10 seconds max
-  
-  function monitorSDK() {
-    if (checkSDKReadiness()) {
-      return;
-    }
-    
-    checkCount++;
-    if (checkCount >= maxChecks) {
-      // Force fallback if SDK never loaded
-      if (typeof window.showadsbitv === 'undefined') {
-        console.log("Creating fallback implementation after timeout...");
-        
-        // Create mock with exact same API
-        window.showadsbitv = function(ex) {
-          console.log("[Fallback] showadsbitv called with:", ex);
+
+  // Monitor SDK appearance
+  let attempts = 0;
+  const monitor = setInterval(() => {
+    if (sdkReady) return clearInterval(monitor);
+    if (checkRealSDK()) return clearInterval(monitor);
+    if (++attempts > 12) {
+      // Force fallback
+      if (typeof window.showadsbitvex === 'undefined') {
+        window.showadsbitvex = function() {
           return new Promise((resolve, reject) => {
-            setStatus("📺 [Demo Mode] Simulating ad playback...", false);
+            addLog('[Mock] Simulating ad playback...', false);
             setTimeout(() => {
-              const success = Math.random() > 0.15; // 85% success rate for demo
-              if (success) {
-                resolve({ success: true });
+              if (Math.random() > 0.1) {
+                resolve();
               } else {
-                reject(new Error("Ad skipped or unavailable (demo simulation)"));
+                reject(new Error('Ad unavailable (simulated)'));
               }
             }, 1500);
           });
         };
-        
-        if (typeof window.ex === 'undefined') {
-          window.ex = { demoMode: true };
-        }
-        
-        updateSdkStatus(true, 'demo fallback');
-        setStatus("⚠️ Remote SDK unavailable - using demo fallback with same API contract", false);
-        setButtonLoading(false);
+        addLog('Fallback mock activated (real SDK unavailable)', false);
+      }
+      setSDKReady(true, 'mock fallback');
+      clearInterval(monitor);
+    }
+  }, 800);
+
+  // Watch ad function
+  async function watchAd() {
+    if (isAdLoading) {
+      addLog('Ad already loading, please wait.', false);
+      return;
+    }
+    if (!sdkReady || typeof window.showadsbitvex !== 'function') {
+      addLog('SDK not ready yet.', true);
+      return;
+    }
+
+    isAdLoading = true;
+    watchBtn.disabled = true;
+    watchBtn.innerHTML = '⏳ Loading ad...';
+    addLog('Calling window.showadsbitvex()...', false);
+
+    try {
+      await window.showadsbitvex();
+      // Success: user watched ad
+      userPoints += 50;
+      updateBalanceUI();
+      addLog(`🎉 Reward granted! +50 credits. Total: ${userPoints}`, false);
+    } catch (err) {
+      addLog(`Ad error: ${err?.message || err || 'unknown'} – no reward given.`, true);
+    } finally {
+      isAdLoading = false;
+      if (sdkReady) {
+        watchBtn.disabled = false;
+        watchBtn.innerHTML = '🎬 Watch rewarded ad & get +50 credits';
+      } else {
+        watchBtn.innerHTML = '⏳ Waiting for SDK...';
       }
     }
   }
-  
-  // Attach click handler
-  watchAdBtn.addEventListener('click', triggerRewardedAd);
-  
-  // Initialize
+
+  watchBtn.addEventListener('click', watchAd);
   updateBalanceUI();
-  setButtonLoading(true);
-  
-  // Check immediately and then periodically
-  setTimeout(() => {
-    monitorSDK();
-  }, 1000);
-  
-  const monitorInterval = setInterval(() => {
-    if (sdkReady) {
-      clearInterval(monitorInterval);
-    } else {
-      monitorSDK();
-    }
-  }, 1000);
-  
-  // Also check when script loads
-  const adScript = document.getElementById('adsbitv-external-script');
-  if (adScript) {
-    adScript.onload = function() {
-      console.log("External ad script loaded");
-      setTimeout(() => checkSDKReadiness(), 100);
-    };
-    adScript.onerror = function() {
-      console.warn("Failed to load remote ad script, will use fallback");
-      setStatus("Remote ad script failed to load, activating fallback mode...", false);
-    };
-  }
-  
-  // Make sure window.ex is defined to match the exact syntax
-  if (typeof window.ex === 'undefined') {
-    window.ex = { ready: true, appId: "3196b91c0b69" };
-    console.log("Defined window.ex to match integration pattern: window.showadsbitv(ex)");
-  }
-  
-  console.log("ADSBitv-ex demo ready with App ID: 3196b91c0b69");
-  console.log("Integration pattern: window.showadsbitv(ex).then(() => give reward())");
+  // Initial check
+  setTimeout(() => checkRealSDK(), 500);
 </script>
 </body>
-</html>      
-        
-          
-       
-           
-           
-            
-            
-            
-      
-           
-
-        
-       
-       
-           
-
-           
-              
-            
-                        
+</html>
