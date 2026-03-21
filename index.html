@@ -1,440 +1,657 @@
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSwipe Arena · Telegram Game</title>
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ADSBitv-ex Demo | Rewarded Ads Integration - Fixed</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .demo-container {
+      max-width: 780px;
+      width: 100%;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(2px);
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.05);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .hero {
+      background: #0b1120;
+      padding: 1.8rem 2rem;
+      border-bottom: 1px solid rgba(255,215,0,0.2);
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #FFFFFF, #C0E0FF, #FFE5A3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .hero .badge {
+      background: rgba(255,215,0,0.2);
+      padding: 0.25rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #FFE5A3;
+      margin-left: 1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .content {
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .integration-card {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+      border: 1px solid #e9edf2;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .code-header {
+      background: #f8fafd;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid #eef2f8;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .code-header span {
+      background: #e2e8f0;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      color: #0f172a;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1.2rem 1.5rem;
+      margin: 0;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      border-radius: 0;
+    }
+
+    .reward-panel {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      border: 1px solid #eef2f8;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .reward-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .reward-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      background: linear-gradient(120deg, #0f172a, #2d3a5e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .coin-stats {
+      background: #fef9e3;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #b45309;
+      border: 1px solid #ffedd5;
+    }
+
+    .reward-balance {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 1.2rem;
+      background: #f1f5f9;
+      display: inline-block;
+      padding: 0.2rem 1.2rem;
+      border-radius: 48px;
+      letter-spacing: 1px;
+    }
+
+    .btn-ad {
+      background: linear-gradient(105deg, #fbbf24 0%, #f59e0b 100%);
+      border: none;
+      padding: 0.9rem 1.8rem;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0c0a2a;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 18px rgba(245, 158, 11, 0.25);
+      font-family: inherit;
+    }
+
+    .btn-ad:hover:not(:disabled) {
+      transform: scale(1.02);
+      background: linear-gradient(105deg, #fcd34d, #fbbf24);
+      box-shadow: 0 12px 22px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-ad:active {
+      transform: scale(0.98);
+    }
+
+    .btn-ad:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      filter: grayscale(0.05);
+    }
+
+    .status-area {
+      margin-top: 1.5rem;
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      font-size: 0.85rem;
+      font-family: monospace;
+      color: #1e293b;
+      border-left: 4px solid #f59e0b;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      word-break: break-word;
+      margin-bottom: 0.3rem;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #5b6e8c;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.5rem;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    button .emoji {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 1rem;
+      }
+      .content {
+        padding: 1.2rem;
+      }
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  
+  <!-- ============================================= -->
+  <!-- STEP 1: Add the Ad Script (with App ID)      -->
+  <!-- App ID: 3196b91c0b69                          -->
+  <!-- ============================================= -->
+  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appId=3196b91c0b69" id="adsbitv-external-script"></script>
+  
+  <!-- Fallback: If the SDK doesn't load, we'll create a mock for testing -->
+  <script>
+    // This fallback ensures the demo works even if the actual SDK endpoint is unavailable
+    // It maintains the exact same API contract: window.showadsbitv(ex) returns a Promise
+    
+    let sdkLoadAttempts = 0;
+    const maxWaitTime = 5000; // 5 seconds max wait
+    
+    function checkAndSetupFallback() {
+      if (typeof window.showadsbitv !== 'undefined') {
+        console.log("✅ ADSBitv SDK loaded successfully from remote endpoint!");
+        return true;
+      }
+      
+      sdkLoadAttempts++;
+      if (sdkLoadAttempts > 10) {
+        console.warn("⚠️ Remote SDK not loaded after multiple attempts. Using fallback mock implementation for demo purposes.");
+        
+        // Create the exact same API as documented
+        // This matches the integration pattern: window.showadsbitv(ex) returns Promise
+        window.showadsbitv = function(ex) {
+          console.log("[Mock] showadsbitv called with:", ex);
+          
+          return new Promise((resolve, reject) => {
+            // Simulate ad loading delay
+            const timeout = setTimeout(() => {
+              // Simulate successful ad watch 90% of the time for testing
+              const shouldSucceed = Math.random() > 0.1;
+              
+              if (shouldSucceed) {
+                resolve({ success: true, message: "Ad watched successfully" });
+              } else {
+                reject(new Error("User skipped the ad or ad failed to load"));
+              }
+            }, 1500);
+            
+            // Store timeout to show loading state
+            window._currentAdTimeout = timeout;
+          });
+        };
+        
+        // Also define window.ex if needed
+        if (typeof window.ex === 'undefined') {
+          window.ex = { adContext: true, appId: "3196b91c0b69" };
         }
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: linear-gradient(145deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 16px;
-        }
-        .game-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 36px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 420px;
-            padding: 24px 20px 32px;
-            text-align: center;
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e3c72, #3b6cb0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
-        }
-        .subhead {
-            color: #4a5568;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            font-weight: 400;
-            border-bottom: 1px dashed #cbd5e0;
-            padding-bottom: 12px;
-        }
-        .score-board {
-            background: #2d3748;
-            border-radius: 60px;
-            padding: 12px 24px;
-            display: inline-block;
-            margin-bottom: 24px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .score-board span {
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .score-label {
-            color: #a0aec0;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .ad-card {
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 20px 16px 18px;
-            margin-bottom: 28px;
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.2);
-            border: 2px solid #edf2f7;
-        }
-        .ad-image {
-            width: 100%;
-            height: auto;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 18px;
-            background: #e2e8f0;
-            margin-bottom: 16px;
-            border: 1px solid #cbd5e0;
-        }
-        .ad-headline {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #1e293b;
-            line-height: 1.2;
-            margin-bottom: 6px;
-        }
-        .ad-description {
-            color: #475569;
-            font-size: 1rem;
-            padding: 0 8px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin: 24px 0 16px;
-        }
-        .btn {
-            border: none;
-            background: none;
-            font-size: 2.2rem;
-            width: 80px;
-            height: 80px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-        .btn-like {
-            background: #10b981;
-            color: white;
-        }
-        .btn-dislike {
-            background: #ef4444;
-            color: white;
-        }
-        .btn:active {
-            transform: scale(0.9);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        .feedback {
-            min-height: 40px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 40px;
-            background: #f8fafc;
-            padding: 8px 16px;
-            margin-top: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        .bottom-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .secondary-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 12px 24px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-            transition: background 0.2s, transform 0.1s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            flex: 0 1 auto;
-        }
-        .secondary-btn:hover {
-            background: #2563eb;
-        }
-        .secondary-btn:active {
-            transform: scale(0.97);
-        }
-        .submit-btn {
-            background: #8b5cf6;
-            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
-        }
-        .submit-btn:hover {
-            background: #7c3aed;
-        }
-        .footer-note {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 24px;
-        }
-        /* Simple debug output (hidden by default) */
-        #debugConsole {
-            background: #1e1e2f;
-            color: #0f0;
-            font-family: monospace;
-            font-size: 12px;
-            text-align: left;
-            padding: 8px;
-            border-radius: 8px;
-            max-height: 100px;
-            overflow: auto;
-            margin-top: 16px;
-            display: none; /* Hide by default; set to block if needed */
-        }
-    </style>
+        
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Check periodically for SDK
+    let checkInterval = setInterval(() => {
+      if (checkAndSetupFallback()) {
+        clearInterval(checkInterval);
+      }
+    }, 500);
+    
+    // Also check after page load
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        checkAndSetupFallback();
+      }, 1000);
+    });
+  </script>
 </head>
 <body>
-    <div class="game-card">
-        <h1>AdSwipe Arena</h1>
-        <div class="subhead">⚡ tap • rate • dominate</div>
 
-        <div class="score-board">
-            <div class="score-label">SCORE</div>
-            <span id="scoreValue">0</span>
-        </div>
+<div class="demo-container">
+  <div class="hero">
+    <div>
+      <h1>ADSBitv-ex <span class="badge">Rewarded Ads SDK</span></h1>
+      <p>Monetization & engagement · seamless reward integration | <strong style="color:#FFE5A3;">App ID: 3196b91c0b69</strong></p>
+    </div>
+  </div>
 
-        <!-- Ad display card -->
-        <div class="ad-card">
-            <img id="adImage" class="ad-image" src="https://placehold.co/400x200/3b82f6/white?text=Loading+Ad..." alt="ad creative">
-            <div id="adHeadline" class="ad-headline">Awesome Product</div>
-            <div id="adDescription" class="ad-description">Short description will appear here</div>
-        </div>
+  <div class="content">
+    <!-- Integration documentation recap card (visual) -->
+    <div class="integration-card">
+      <div class="code-header">
+        📘 Quick Start Guide · <span>Step 1 + Step 2 integrated</span>
+      </div>
+      <pre><code>&lt;script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appId=3196b91c0b69"&gt;&lt;/script&gt;
 
-        <!-- Like / Dislike buttons -->
-        <div class="action-buttons">
-            <button class="btn btn-like" id="likeBtn">👍</button>
-            <button class="btn btn-dislike" id="dislikeBtn">👎</button>
-        </div>
-
-        <!-- Instant feedback area -->
-        <div id="feedbackMessage" class="feedback">👆 vote now</div>
-
-        <!-- TWO CLICKABLE BOTTOM BUTTONS -->
-        <div class="bottom-buttons">
-            <button class="secondary-btn" id="newGameBtn">↻ New Game</button>
-            <button class="secondary-btn submit-btn" id="submitScoreBtn">🏆 Submit Score</button>
-        </div>
-
-        <!-- Hidden debug console (uncomment style display:block to see logs) -->
-        <div id="debugConsole"></div>
-
-        <div class="footer-note">— game category —</div>
+&lt;script&gt;
+window.showadsbitv(ex)
+  .then(() => { 
+    // User watched the ad – give reward here!
+    console.log("Reward earned!"); 
+  })
+  .catch(e => { 
+    console.error("Ad error:", e); 
+  });
+&lt;/script&gt;</code></pre>
     </div>
 
-    <script>
-        (function() {
-            "use strict";
+    <!-- Reward simulation panel (actual integration demo) -->
+    <div class="reward-panel">
+      <div class="reward-header">
+        <h2>🎁 Rewarded Ads Demo</h2>
+        <div class="coin-stats">
+          <span>⭐</span> <span>Credits earned by watching ads</span>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #475569;">Your reward balance</div>
+          <div class="reward-balance" id="rewardBalanceDisplay">0</div>
+        </div>
+        <button class="btn-ad" id="showRewardedAdBtn">
+          <span class="emoji">🎬</span> Watch rewarded ad & get +50 credits
+        </button>
+      </div>
 
-            // Simple debug logger (writes to console and to hidden div if present)
-            function debugLog(...args) {
-                console.log(...args);
-                const debugDiv = document.getElementById('debugConsole');
-                if (debugDiv) {
-                    const msg = args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-                    ).join(' ');
-                    debugDiv.innerHTML += '[LOG] ' + msg + '<br>';
-                    // Auto-scroll to bottom
-                    debugDiv.scrollTop = debugDiv.scrollHeight;
-                }
-            }
+      <div class="status-area" id="adStatusMessage">
+        <div class="log-entry">⚡ Initializing ADSBitv-ex SDK with App ID: 3196b91c0b69...</div>
+        <div class="log-entry">📝 Integration pattern: window.showadsbitv(ex) → reward grant</div>
+      </div>
+      
+      <div class="warning-box" id="sdkStatusBox">
+        🔄 Checking SDK availability...
+      </div>
+      
+      <p style="font-size: 0.7rem; color: #5b6e8c; margin-top: 0.8rem;">
+        💡 <strong>Note:</strong> If the remote SDK endpoint is unavailable, a mock implementation automatically activates 
+        (following the exact same API contract). This ensures you can test the integration pattern regardless of network conditions.
+      </p>
+    </div>
 
-            debugLog('Script started');
+    <div class="footer-note">
+      <strong>📄 Integration with App ID: 3196b91c0b69</strong> — ADSBitv-ex rewarded ads | Built following official docs<br/>
+      Syed Abrar Jahin — jahinbang888@gmail.com
+    </div>
+  </div>
+</div>
 
-            // --- Telegram WebApp init ---
-            const tg = window.Telegram?.WebApp;
-            if (tg) {
-                tg.expand();
-                tg.enableClosingConfirmation();
-                debugLog('Telegram WebApp initialized');
-            } else {
-                debugLog('Telegram WebApp not available (running outside Telegram)');
-            }
+<script>
+  // *************************************************************
+  // Complete integration following ADSBitv-ex documentation
+  // Step 1: Ad script loaded with appId = 3196b91c0b69
+  // Step 2: Call window.showadsbitv(ex) to show rewarded ad
+  // On success -> grant reward, on error -> handle gracefully
+  // *************************************************************
 
-            // --- Game data ---
-            const ads = [
-                { image: 'https://placehold.co/400x200/22c55e/white?text=Ergonomic+Chair', headline: 'Ergonomic Chair', description: 'Back pain? Never again! 40% off today.', good: true },
-                { image: 'https://placehold.co/400x200/eab308/black?text=Burger+King', headline: 'Whopper Deal', description: 'Buy 1 Get 1 Free – limited time.', good: false },
-                { image: 'https://placehold.co/400x200/ef4444/white?text=Online+Casino', headline: 'Win Big!', description: 'Spin the wheel and get up to $500.', good: false },
-                { image: 'https://placehold.co/400x200/3b82f6/white?text=Learning+App', headline: 'Learn Python', description: 'Interactive courses, start for free.', good: true },
-                { image: 'https://placehold.co/400x200/a855f7/white?text=Skincare+Set', headline: 'Glowing Skin Kit', description: 'Natural ingredients – 30% off first order.', good: true }
-            ];
-
-            let currentAd = null;
-            let score = 0;
-
-            // DOM elements
-            const scoreSpan = document.getElementById('scoreValue');
-            const adImage = document.getElementById('adImage');
-            const adHeadline = document.getElementById('adHeadline');
-            const adDescription = document.getElementById('adDescription');
-            const feedbackDiv = document.getElementById('feedbackMessage');
-            const likeBtn = document.getElementById('likeBtn');
-            const dislikeBtn = document.getElementById('dislikeBtn');
-            const newGameBtn = document.getElementById('newGameBtn');
-            const submitBtn = document.getElementById('submitScoreBtn');
-
-            // Verify all elements exist
-            debugLog('DOM elements:', {
-                scoreSpan: !!scoreSpan,
-                adImage: !!adImage,
-                adHeadline: !!adHeadline,
-                adDescription: !!adDescription,
-                feedbackDiv: !!feedbackDiv,
-                likeBtn: !!likeBtn,
-                dislikeBtn: !!dislikeBtn,
-                newGameBtn: !!newGameBtn,
-                submitBtn: !!submitBtn
-            });
-
-            if (!likeBtn || !dislikeBtn || !newGameBtn || !submitBtn) {
-                debugLog('ERROR: One or more buttons missing!');
-                return;
-            }
-
-            // Helper: pick random ad
-            function getRandomAd() {
-                return ads[Math.floor(Math.random() * ads.length)];
-            }
-
-            // Load a new ad into UI
-            function loadNewAd() {
-                currentAd = getRandomAd();
-                adImage.src = currentAd.image;
-                adHeadline.innerText = currentAd.headline;
-                adDescription.innerText = currentAd.description;
-                feedbackDiv.innerText = '👆 new ad – vote!';
-                feedbackDiv.style.color = '#334155';
-                feedbackDiv.style.background = '#f8fafc';
-                debugLog('New ad loaded:', currentAd.headline);
-            }
-
-            // Update score display
-            function updateScore() {
-                scoreSpan.innerText = score;
-                debugLog('Score updated:', score);
-            }
-
-            // Reset game
-            function resetGame() {
-                debugLog('Reset game clicked');
-                score = 0;
-                updateScore();
-                loadNewAd();
-                feedbackDiv.innerText = '🔄 game restarted!';
-                feedbackDiv.style.color = '#1e3c72';
-                feedbackDiv.style.background = '#e0f2fe';
-                setTimeout(() => {
-                    if (feedbackDiv.innerText === '🔄 game restarted!') {
-                        feedbackDiv.innerText = '👆 vote now';
-                        feedbackDiv.style.color = '#334155';
-                        feedbackDiv.style.background = '#f8fafc';
-                    }
-                }, 1200);
-            }
-
-            // Show feedback message
-            function showFeedback(message, isCorrect) {
-                feedbackDiv.innerText = message;
-                feedbackDiv.style.background = isCorrect ? '#d1fae5' : '#fee2e2';
-                feedbackDiv.style.color = isCorrect ? '#065f46' : '#991b1b';
-                debugLog('Feedback:', message, 'Correct:', isCorrect);
-            }
-
-            // Handle vote
-            function handleVote(userLiked) {
-                debugLog('Vote registered:', userLiked ? 'Like' : 'Dislike');
-                if (!currentAd) {
-                    debugLog('No current ad, loading new one');
-                    loadNewAd();
-                    return;
-                }
-
-                const isCorrect = (userLiked === currentAd.good);
-                if (isCorrect) {
-                    score += 10;
-                    showFeedback('✅ Correct! +10 points', true);
-                } else {
-                    showFeedback('❌ Oops! Wrong vote', false);
-                }
-
-                updateScore();
-
-                setTimeout(() => {
-                    loadNewAd();
-                }, 600);
-            }
-
-            // Submit score to Telegram
-            function submitScore() {
-                debugLog('Submit score clicked, score:', score);
-                if (tg) {
-                    const data = JSON.stringify({ score: score });
-                    tg.sendData(data);
-                    debugLog('Sent data to Telegram:', data);
-                    tg.close();
-                } else {
-                    alert('Score: ' + score + ' (Telegram not available)');
-                }
-            }
-
-            // Attach event listeners with explicit checks
-            likeBtn.addEventListener('click', function(e) {
-                debugLog('Like button clicked');
-                handleVote(true);
-            });
-
-            dislikeBtn.addEventListener('click', function(e) {
-                debugLog('Dislike button clicked');
-                handleVote(false);
-            });
-
-            newGameBtn.addEventListener('click', function(e) {
-                debugLog('New Game button clicked');
-                resetGame();
-            });
-
-            submitBtn.addEventListener('click', function(e) {
-                debugLog('Submit button clicked');
-                submitScore();
-            });
-
-            // Also attach touch events for mobile (prevent default to avoid zoom)
-            [likeBtn, dislikeBtn, newGameBtn, submitBtn].forEach(btn => {
-                btn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                }, { passive: false });
-            });
-
-            // Initialize
-            loadNewAd();
-            updateScore();
-            debugLog('Initialization complete');
-
-            // If you want to see debug console, uncomment next line:
-            // document.getElementById('debugConsole').style.display = 'block';
-        })();
-    </script>
+  // --- UI Elements ---
+  const rewardBalanceSpan = document.getElementById('rewardBalanceDisplay');
+  const watchAdBtn = document.getElementById('showRewardedAdBtn');
+  const statusMessageDiv = document.getElementById('adStatusMessage');
+  const sdkStatusBox = document.getElementById('sdkStatusBox');
+  
+  // Reward state
+  let userRewardPoints = 0;
+  const REWARD_AMOUNT = 50;
+  let isAdLoading = false;
+  let sdkReady = false;
+  
+  // Helper: update balance UI
+  function updateBalanceUI() {
+    rewardBalanceSpan.innerText = userRewardPoints;
+  }
+  
+  // Helper: display log/status
+  function setStatus(message, isError = false) {
+    const timestamp = new Date().toLocaleTimeString();
+    const icon = isError ? '❌' : '✅';
+    const html = `<div class="log-entry">${icon} [${timestamp}] ${message}</div>`;
+    
+    const currentHtml = statusMessageDiv.innerHTML;
+    let newContent = html + currentHtml;
+    
+    // Limit entries
+    const lines = newContent.split('<div class="log-entry">');
+    if (lines.length > 12) {
+      const limited = lines.slice(0, 12).join('<div class="log-entry">');
+      newContent = limited;
+    }
+    statusMessageDiv.innerHTML = newContent;
+    
+    if (isError) {
+      console.error(`[ADSBitv] ${message}`);
+    } else {
+      console.log(`[ADSBitv] ${message}`);
+    }
+  }
+  
+  // Update SDK status box
+  function updateSdkStatus(isReady, source = 'unknown') {
+    if (isReady) {
+      sdkStatusBox.style.background = '#d1fae5';
+      sdkStatusBox.style.borderLeftColor = '#10b981';
+      sdkStatusBox.innerHTML = `✅ SDK Ready! Using ${source} implementation. You can now watch rewarded ads.`;
+      sdkReady = true;
+      watchAdBtn.disabled = false;
+    } else {
+      sdkStatusBox.style.background = '#fef3c7';
+      sdkStatusBox.style.borderLeftColor = '#f59e0b';
+      sdkStatusBox.innerHTML = `⏳ Loading SDK from remote endpoint... (App ID: 3196b91c0b69)<br>If unavailable, fallback will activate automatically.`;
+      watchAdBtn.disabled = true;
+    }
+  }
+  
+  // Set button loading state
+  function setButtonLoading(loading) {
+    isAdLoading = loading;
+    if (loading) {
+      watchAdBtn.disabled = true;
+      watchAdBtn.innerHTML = '<span class="emoji">⏳</span> Loading ad... please wait';
+    } else {
+      watchAdBtn.disabled = !sdkReady;
+      if (sdkReady) {
+        watchAdBtn.innerHTML = '<span class="emoji">🎬</span> Watch rewarded ad & get +50 credits';
+      } else {
+        watchAdBtn.innerHTML = '<span class="emoji">⏳</span> Waiting for SDK...';
+      }
+    }
+  }
+  
+  // --- Core reward function - EXACT integration from docs ---
+  function triggerRewardedAd() {
+    // Check if ad is already loading
+    if (isAdLoading) {
+      setStatus("Ad request already in progress, please wait...", false);
+      return;
+    }
+    
+    // Check if SDK is ready
+    if (typeof window.showadsbitv === 'undefined') {
+      setStatus("Ad SDK not ready yet. Please wait for initialization...", true);
+      return;
+    }
+    
+    setButtonLoading(true);
+    setStatus("📺 Requesting rewarded ad via window.showadsbitv(ex)...", false);
+    
+    // ========================================================
+    // EXACT INTEGRATION AS PER DOCUMENTATION:
+    // window.showadsbitv(ex)
+    //   .then(() => { /* give reward */ })
+    //   .catch(e => { /* handle error */ })
+    // ========================================================
+    window.showadsbitv(ex)
+      .then(() => {
+        // User watched the ad – give reward here!
+        const rewardEarned = REWARD_AMOUNT;
+        userRewardPoints += rewardEarned;
+        updateBalanceUI();
+        
+        setStatus(`✨ Reward granted! +${rewardEarned} credits. Total: ${userRewardPoints} points.`, false);
+        setButtonLoading(false);
+        
+        // Visual feedback
+        rewardBalanceSpan.style.transform = "scale(1.1)";
+        setTimeout(() => { 
+          if(rewardBalanceSpan) rewardBalanceSpan.style.transform = ""; 
+        }, 200);
+      })
+      .catch((error) => {
+        // Handle ad error (user skipped, network failure, no fill, etc)
+        console.warn("Ad error:", error);
+        let errorMsg = "Ad could not be displayed or was interrupted.";
+        
+        if (error && typeof error === 'object') {
+          if (error.message) errorMsg = error.message;
+          else if (error.toString) errorMsg = error.toString();
+        } else if (typeof error === 'string') {
+          errorMsg = error;
+        }
+        
+        setStatus(`Ad error: ${errorMsg}. No reward given.`, true);
+        setButtonLoading(false);
+      });
+  }
+  
+  // Check SDK readiness and determine source
+  function checkSDKReadiness() {
+    if (typeof window.showadsbitv !== 'undefined') {
+      // Check if it's our mock or real SDK
+      const isMock = window.showadsbitv.toString().includes('mock') || 
+                     window.showadsbitv.toString().includes('fallback');
+      const source = isMock ? 'fallback mock' : 'remote ADSBitv SDK';
+      updateSdkStatus(true, source);
+      setStatus(`✅ SDK initialized successfully using ${source} implementation`, false);
+      setButtonLoading(false);
+      return true;
+    }
+    return false;
+  }
+  
+  // Monitor SDK availability
+  let checkCount = 0;
+  const maxChecks = 20; // 10 seconds max
+  
+  function monitorSDK() {
+    if (checkSDKReadiness()) {
+      return;
+    }
+    
+    checkCount++;
+    if (checkCount >= maxChecks) {
+      // Force fallback if SDK never loaded
+      if (typeof window.showadsbitv === 'undefined') {
+        console.log("Creating fallback implementation after timeout...");
+        
+        // Create mock with exact same API
+        window.showadsbitv = function(ex) {
+          console.log("[Fallback] showadsbitv called with:", ex);
+          return new Promise((resolve, reject) => {
+            setStatus("📺 [Demo Mode] Simulating ad playback...", false);
+            setTimeout(() => {
+              const success = Math.random() > 0.15; // 85% success rate for demo
+              if (success) {
+                resolve({ success: true });
+              } else {
+                reject(new Error("Ad skipped or unavailable (demo simulation)"));
+              }
+            }, 1500);
+          });
+        };
+        
+        if (typeof window.ex === 'undefined') {
+          window.ex = { demoMode: true };
+        }
+        
+        updateSdkStatus(true, 'demo fallback');
+        setStatus("⚠️ Remote SDK unavailable - using demo fallback with same API contract", false);
+        setButtonLoading(false);
+      }
+    }
+  }
+  
+  // Attach click handler
+  watchAdBtn.addEventListener('click', triggerRewardedAd);
+  
+  // Initialize
+  updateBalanceUI();
+  setButtonLoading(true);
+  
+  // Check immediately and then periodically
+  setTimeout(() => {
+    monitorSDK();
+  }, 1000);
+  
+  const monitorInterval = setInterval(() => {
+    if (sdkReady) {
+      clearInterval(monitorInterval);
+    } else {
+      monitorSDK();
+    }
+  }, 1000);
+  
+  // Also check when script loads
+  const adScript = document.getElementById('adsbitv-external-script');
+  if (adScript) {
+    adScript.onload = function() {
+      console.log("External ad script loaded");
+      setTimeout(() => checkSDKReadiness(), 100);
+    };
+    adScript.onerror = function() {
+      console.warn("Failed to load remote ad script, will use fallback");
+      setStatus("Remote ad script failed to load, activating fallback mode...", false);
+    };
+  }
+  
+  // Make sure window.ex is defined to match the exact syntax
+  if (typeof window.ex === 'undefined') {
+    window.ex = { ready: true, appId: "3196b91c0b69" };
+    console.log("Defined window.ex to match integration pattern: window.showadsbitv(ex)");
+  }
+  
+  console.log("ADSBitv-ex demo ready with App ID: 3196b91c0b69");
+  console.log("Integration pattern: window.showadsbitv(ex).then(() => give reward())");
+</script>
 </body>
-</html>     
-                
+</html>      
+        
+          
+       
+           
+           
+            
+            
+            
+      
+           
+
+        
+       
+       
+           
+
+           
+              
+            
+                        
