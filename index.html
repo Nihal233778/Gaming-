@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test</title>
-  <!-- Try lowercase appid -->
-  <script src="https://budgebpsqjghdltrkzbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"></script>
+  <title>ADSBitvex – Final Test</title>
+  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"></script>
 </head>
 <body>
-  <button onclick="test()">Test</button>
+  <button onclick="showRewardedAd()">Show Rewarded Ad</button>
   <pre id="log"></pre>
+
   <script>
+    const logDiv = document.getElementById('log');
     function log(msg) {
-      document.getElementById('log').innerText += msg + '\n';
+      logDiv.innerText += msg + '\n';
       console.log(msg);
     }
 
+    // Wait for the script to load
     setTimeout(() => {
-      log(`typeof window.showadsbitvex = ${typeof window.showadsbitvex}`);
-      log(`Any global with 'adsbitv': ${Object.keys(window).filter(k => k.toLowerCase().includes('adsbitv'))}`);
-    }, 1500);
-
-    async function test() {
       if (typeof window.showadsbitvex === 'function') {
-        log('Calling showadsbitvex...');
-        try {
-          await window.showadsbitvex();
-          log('Reward granted!');
-        } catch(e) {
-          log('Ad error: ' + e.message);
-        }
+        log('✅ SDK ready');
       } else {
-        log('showadsbitvex not available');
+        log('❌ SDK not loaded – check Network tab');
+      }
+    }, 1000);
+
+    async function showRewardedAd() {
+      if (typeof window.showadsbitvex !== 'function') {
+        log('SDK not ready');
+        return;
+      }
+      log('Calling showadsbitvex()...');
+      try {
+        await window.showadsbitvex();
+        log('✅ Reward granted! +50 credits');
+        // Your reward logic here
+      } catch (err) {
+        log(`❌ Ad error: ${err?.message || err}`);
       }
     }
   </script>
