@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ADSBitv Test</title>
-  <!-- Real SDK script -->
-  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"></script>
+  <title>ADSBitvex Test</title>
+  <!-- CORRECT SCRIPT URL with appId (capital I) -->
+  <script src="https://budgebpsqjghdltrkzbg.supabase.co/functions/v1/ad-script?appId=3196b91c0b69"></script>
 </head>
 <body>
-  <button onclick="testAd()">Test Ad</button>
+  <button onclick="testAd()">Show Ad</button>
   <pre id="log"></pre>
   <script>
     function log(msg) {
-      document.getElementById('log').innerText += msg + '\n';
+      const pre = document.getElementById('log');
+      pre.innerText += msg + '\n';
       console.log(msg);
     }
 
-    // Wait for script to load, then check if showadsbitvex exists
+    // Wait a moment for the script to load
     setTimeout(() => {
-      log("After 2 seconds: typeof window.showadsbitvex = " + typeof window.showadsbitvex);
+      log(`typeof window.showadsbitvex = ${typeof window.showadsbitvex}`);
       if (typeof window.showadsbitvex === 'function') {
-        log("✅ SDK function exists");
+        log('✅ SDK loaded correctly');
       } else {
-        log("❌ SDK function missing");
+        log('❌ SDK function missing – check network tab for script response');
       }
-    }, 2000);
+    }, 1000);
 
     async function testAd() {
       if (typeof window.showadsbitvex !== 'function') {
-        log("❌ showadsbitvex not available");
+        log('❌ showadsbitvex not available');
         return;
       }
-      log("Calling showadsbitvex()...");
+      log('Calling showadsbitvex()...');
       try {
         await window.showadsbitvex();
-        log("✅ Ad watched – reward granted");
+        log('✅ Ad watched – reward granted!');
       } catch (err) {
-        log("❌ Ad error: " + (err?.message || err));
+        log(`❌ Ad error: ${err?.message || err}`);
       }
     }
   </script>
