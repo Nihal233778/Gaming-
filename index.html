@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test ADSBitv</title>
+  <title>ADSBitv Test</title>
+  <!-- Real SDK script -->
   <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"></script>
 </head>
 <body>
-  <button onclick="showAd()">Show Ad</button>
+  <button onclick="testAd()">Test Ad</button>
+  <pre id="log"></pre>
   <script>
-    function showAd() {
+    function log(msg) {
+      document.getElementById('log').innerText += msg + '\n';
+      console.log(msg);
+    }
+
+    // Wait for script to load, then check if showadsbitvex exists
+    setTimeout(() => {
+      log("After 2 seconds: typeof window.showadsbitvex = " + typeof window.showadsbitvex);
+      if (typeof window.showadsbitvex === 'function') {
+        log("✅ SDK function exists");
+      } else {
+        log("❌ SDK function missing");
+      }
+    }, 2000);
+
+    async function testAd() {
       if (typeof window.showadsbitvex !== 'function') {
-        console.error("SDK not loaded");
+        log("❌ showadsbitvex not available");
         return;
       }
-      window.showadsbitvex()
-        .then(() => console.log("Ad watched – give reward"))
-        .catch(e => console.error("Ad error", e));
+      log("Calling showadsbitvex()...");
+      try {
+        await window.showadsbitvex();
+        log("✅ Ad watched – reward granted");
+      } catch (err) {
+        log("❌ Ad error: " + (err?.message || err));
+      }
     }
   </script>
 </body>
