@@ -209,34 +209,51 @@
   <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69" id="adsbitv-script"></script>
 
   <!-- Fallback: ensures demo works even if real SDK fails -->
+
   <script>
-    let sdkCheckCount = 0;
-    function checkAndFallback() {
-      if (typeof window.showadsbitvex !== 'undefined') {
-        console.log("✅ Real ADSBitv SDK loaded.");
-        return true;
-      }
-      if (sdkCheckCount++ > 10) {
-        console.warn("⚠️ Real SDK not loaded, using mock fallback.");
-        window.showadsbitvex = function() {
-          console.log("[Mock] showadsbitvex called");
-          return new Promise((resolve, reject) => {
-            setTimeout(() => {
-              if (Math.random() > 0.1) {
-                resolve({ success: true });
-              } else {
-                reject(new Error("Ad unavailable (mock simulation)"));
-              }
-            }, 1500);
-          });
-        };
-        return true;
-      }
-      return false;
+  let realSDKLoaded = false;
+
+  // Listen for the ad script load event
+  const adScript = document.getElementById('adsbitv-script');
+  if (adScript) {
+    adScript.onload = function() {
+      console.log("Real ADSBitv script loaded.");
+      realSDKLoaded = typeof window.showadsbitvex === 'function';
+      if (!realSDKLoaded) console.warn("Script loaded but showadsbitvex not defined.");
+    };
+    adScript.onerror = function() {
+      console.error("Failed to load real ADSBitv script.");
+    };
+  }
+
+  // Wait for real SDK, fallback only after timeout
+  let fallbackTimeout = setTimeout(() => {
+    if (!realSDKLoaded && typeof window.showadsbitvex !== 'function') {
+      console.warn("Real SDK never loaded – using mock fallback.");
+      window.showadsbitvex = function() {
+        return new Promise((resolve, reject) => {
+          console.log("[Mock] Simulating ad...");
+          setTimeout(() => {
+            if (Math.random() > 0.1) {
+              resolve();
+            } else {
+              reject(new Error("Ad unavailable (mock simulation)"));
+            }
+          }, 1500);
+        });
+      };
     }
-    setInterval(() => checkAndFallback(), 500);
-    window.addEventListener('load', () => setTimeout(checkAndFallback, 1000));
-  </script>
+  }, 5000); // 5 seconds
+
+  // If real SDK appears later, clear the timeout and don't set mock
+  const checkReal = setInterval(() => {
+    if (typeof window.showadsbitvex === 'function') {
+      realSDKLoaded = true;
+      clearTimeout(fallbackTimeout);
+      clearInterval(checkReal);
+    }
+  }, 200);
+</script>
 </head>
 <body>
 <div class="demo-container">
