@@ -1,43 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>ADSBitvex – Final Test</title>
-  <script src="https://bdeugbqsqjghdltkrkbg.supabase.co/functions/v1/ad-script?appid=3196b91c0b69"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADSBitvex Rewarded Ads</title>
+  <!-- Step 1: Ad script (placed in head) -->
+  <script src="https://bduegbqsqjghdltrkzbg.supabase.co/functions/v1/ad-script?appid=bcd92987a183"></script>
 </head>
 <body>
-  <button onclick="showRewardedAd()">Show Rewarded Ad</button>
-  <pre id="log"></pre>
+  <h1>Rewarded Ads Demo</h1>
+  <button id="rewardBtn">Watch Ad & Get Reward</button>
+  <p>Reward balance: <span id="balance">0</span> coins</p>
+  <pre id="log" style="background:#f0f0f0; padding:10px; margin-top:20px;"></pre>
 
   <script>
-    const logDiv = document.getElementById('log');
+    // Helper to log messages
     function log(msg) {
+      const logDiv = document.getElementById('log');
       logDiv.innerText += msg + '\n';
       console.log(msg);
     }
 
-    // Wait for the script to load
-    setTimeout(() => {
-      if (typeof window.showadsbitvex === 'function') {
-        log('✅ SDK ready');
-      } else {
-        log('❌ SDK not loaded – check Network tab');
-      }
-    }, 1000);
+    // Balance tracking
+    let coins = 0;
+    const balanceSpan = document.getElementById('balance');
+    function addCoins(amount) {
+      coins += amount;
+      balanceSpan.textContent = coins;
+      log(`💰 +${amount} coins! Total: ${coins}`);
+    }
 
-    async function showRewardedAd() {
+    // Step 2: Show rewarded ad when button is clicked
+    const btn = document.getElementById('rewardBtn');
+    btn.addEventListener('click', async () => {
+      // Check if the SDK function is available
       if (typeof window.showadsbitvex !== 'function') {
-        log('SDK not ready');
+        log('❌ SDK not loaded yet. Check network or console.');
         return;
       }
-      log('Calling showadsbitvex()...');
+
+      log('🎬 Calling window.showadsbitvex()...');
       try {
         await window.showadsbitvex();
-        log('✅ Reward granted! +50 credits');
-        // Your reward logic here
-      } catch (err) {
-        log(`❌ Ad error: ${err?.message || err}`);
+        // User watched the ad – grant reward
+        addCoins(50);
+        log('✅ Reward earned!');
+      } catch (error) {
+        log(`❌ Ad error: ${error?.message || error}`);
       }
-    }
+    });
+
+    // Optional: verify SDK loaded after a short delay
+    setTimeout(() => {
+      if (typeof window.showadsbitvex === 'function') {
+        log('✅ ADSBitvex SDK ready.');
+      } else {
+        log('⚠️ SDK not detected. Make sure the script URL is correct and your App ID is active.');
+      }
+    }, 1500);
   </script>
 </body>
 </html>
